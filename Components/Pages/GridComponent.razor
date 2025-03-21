@@ -1,0 +1,73 @@
+﻿@using Cloudcord.Models
+@rendermode InteractiveServer
+@page "/NewGame"
+
+@if (Grid != null)
+{
+
+    <div class="layout">
+        <h3>GameGrid</h3>
+
+        <div class="message">
+            <p><strong>Red @Grid.Red-@Grid.Yellow Yellow</strong></p>
+            @if (Grid?.Winner.HasValue ?? false)
+            {
+                <p>@Grid.Winner.Value has won the game!</p>
+            }
+
+            <p>@Grid.NextTurn's turn is next</p>
+
+            <button @onclick="@(e => ResetGame(e))">Reset Game</button>
+        </div>
+
+        <div class="grid">
+            @if (Grid != null)
+            {
+                @for (var col = Grid.Pieces.GetLowerBound(0); col <= Grid.Pieces.GetUpperBound(0); col++)
+                {
+                    var c = col;
+                    <div class="column" @onclick="@(e=> ColumnClick(e, c))">
+                        @for (var row = Grid.Pieces.GetUpperBound(1); row >= Grid.Pieces.GetLowerBound(0); row--)
+                        {
+                            <SpaceComponent Piece="@Grid.Pieces[col,row]"> </SpaceComponent>
+                        }
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+}
+@code {
+    public Grid Grid { get; set; }
+
+    //On initalize create new grid
+    protected override Task OnInitializedAsync()
+    {
+        Grid = new Grid();
+
+        return base.OnInitializedAsync();
+    }
+
+    public void ColumnClick(MouseEventArgs eventArgs, int col)
+    {
+        if (Grid.Winner.HasValue)
+        {
+            return;
+        }
+        for (var row = Grid.Pieces.GetLowerBound(1); row <= Grid.Pieces.GetUpperBound(1); row++)
+        {
+            if (!Grid.Pieces[col, row].HasValue)
+            {
+                Grid.Pieces[col, row] = Grid.NextTurn;
+
+                Grid.SetNextttTurn();
+                break;
+            }
+        }
+    }
+    public void ResetGame(MouseEventArgs mouseEventArgs)
+    {
+        Grid.ResetGame();
+    }
+}

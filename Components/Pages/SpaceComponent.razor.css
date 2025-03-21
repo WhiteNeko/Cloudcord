@@ -1,0 +1,21 @@
+﻿.space{
+    width: 150px;
+    height: 100px;
+    background-color: blue;
+    border: 1px white solid;
+    padding: 15px 40px;
+}
+
+.piece-red{
+    background-color: red;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+}
+
+.piece-yellow {
+    background-color: yellow;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+}
